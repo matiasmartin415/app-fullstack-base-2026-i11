@@ -1,3 +1,23 @@
+#Acá escribo lo que voy haciendo:
+#05/11/2026
+
+Asistido por IA implementé controlar lámpara WIZ de comedor casa:
+1-Modifique primero frontend (index.html)
+2-Modifiqué luego frontend (main.ts)
+3-Modifiqué backend index.js
+
+Nota: en la Terminal, en Visual Studio Code, puedo ver los eventos con: docker logs -f app-fullstack-base-2026-i11-node-backend-1 (veo los seteos para la luz que envia desde navegador) 
+
+1-Frontend html, define las barras deslizantes para controlar lamp.
+2-Frontend Typescript, cerebro crea clase lamparaWiz, listeners y fetch
+3-Backend, se genera endpoint app.post para lampara Wiz
+
+Funciona pero no apaga del todo la lámpara.
+
+#06/11/2026
+Funciona pero se cambian los IPasignados por router.(DHCP creo)(Para solucionar me sugiere asociar MAC de lampara y para hacerlo mas correcto, qu esos datos se guarden en SQL)
+Además, encontré que las lámparas usan protocolo UDP (el backend envía datos udp y listo. no espera respuesta)(Si la lampara esta apagada el sistema no se entera)
+
 # DAW Base App - Changes Log
 
 All notable changes to this project will be documented in this file.

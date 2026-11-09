@@ -1,14 +1,12 @@
 <!DOCTYPE html>
   <html>
     <head>
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="https://googleapis.com" rel="stylesheet">
       <link type="text/css" rel="stylesheet" href="./static/css/materialize.min.css"  media="screen,projection"/>
       <link type="text/css" rel="stylesheet" href="./static/css/styles.css"  media="screen,projection"/>
-      <script type="text/javascript" src="./static/js/materialize.min.js"></script>
-      <script type="text/javascript" src="js/main.js"></script>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
-    <body>
+    <body class="grey lighten-4">
         <main>
             <!-- Navigation bar -->
             <nav style="background-color:#124580">
@@ -24,17 +22,57 @@
                 <br/>
                 <h3>Smart Home Web Client!</h3>
                 <br/>
+                
+                <!-- Tu bloque original intacto -->
                 <div class="row">
                     <div class="input-field col s12 m12 l12 xl12">
-                        <textarea id="textarea_1" class="materialize-textarea" style="height: 150px;" readonly></textarea>
+                        <textarea id="textarea_1" class="materialize-textarea" style="height: 150px;"></textarea>
                     </div>
-                    <div class="col s4 m4 l2 xl2">
+                    <div class="col s12">
+                        <div id="mensaje_ayuda" style="font-weight: bold; margin-top: 5px; margin-bottom: 10px;"></div>
                         <button class="btn waves-effect waves-light button-view" onclick="SayHello();" name="hello_button">PRESS ME</button>
+                        <button class="btn waves-effect waves-light button-view" onclick="ClearText();" name="clear_button" style="margin-left: 10px;">LIMPIAR</button>
                     </div>
                 </div>
+
+                <!-- 💡 SECCIÓN DE LAS LÁMPARAS WIZ ALINEADAS -->
+                <div class="row" style="margin-top: 30px;">
+                    
+                    <!-- Lámpara 1 (Izquierda) -->
+                    <div class="col s12 m6 l6 xl6">
+                        <div class="card white z-depth-1" style="border-radius: 8px;">
+                            <div class="card-content">
+                                <span class="card-title bold" style="font-weight: bold; color: #124580;">💡 Lámpara WiZ Primera</span>
+                                <p class="grey-text">Control local - Lámpara 1</p>
+                                <br>
+                                <p style="font-weight: 500;">Potencia (Brillo):</p>
+                                <input type="range" id="wiz-brillo" min="0" max="100" value="100">
+                                <p style="font-weight: 500; margin-top: 15px;">Temperatura de Color:</p>
+                                <input type="range" id="wiz-temperatura" min="2700" max="6500" step="100" value="4000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lámpara 2 (Derecha) -->
+                    <div class="col s12 m6 l6 xl6">
+                        <div class="card white z-depth-1" style="border-radius: 8px;">
+                            <div class="card-content">
+                                <span class="card-title bold" style="font-weight: bold; color: #124580;">💡 Lámpara WiZ Segunda</span>
+                                <p class="grey-text">Control local - Lámpara 2</p>
+                                <br>
+                                <p style="font-weight: 500;">Potencia Lámpara 2:</p>
+                                <input type="range" id="wiz-brillo-2" min="0" max="100" value="100">
+                                <p style="font-weight: 500; margin-top: 15px;">Temperatura Lámpara 2:</p>
+                                <input type="range" id="wiz-temperatura-2" min="2700" max="6500" step="100" value="4000">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Fin de la sección WiZ -->
+
             </div>	
         </main>
-		<!-- Page Footer -->
         <footer class="page-footer" style="background-color:#124580">
             <div class="container">
                 <div class="row">
@@ -53,7 +91,9 @@
                 </div>
             </div>
         </footer>
-		<!--JavaScript at end of body for optimized loading-->
-	
+		
+        <!-- JavaScript al final para carga optimizada -->
+        <script type="text/javascript" src="./static/js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
     </body>
   </html>

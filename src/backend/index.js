@@ -33,6 +33,45 @@ app.get('/devices/', function(req, res, next) {
     res.send(JSON.stringify(devices)).status(200);
 });
 
+///////////////
+// ============================================================================
+// 💡 NUEVO ENDPOINT: Recibe los movimientos de las barras deslizantes de tu frontend
+// ============================================================================
+const dgram = require('dgram'); // Herramienta nativa de Node para mandar paquetes Wi-Fi (UDP)
+
+app.post('/control-wiz/', function(req, res) {
+    // 1. Capturamos los datos empaquetados que mandó el fetch desde main.ts
+    const ipLampara = req.body.ip;
+    const nivelBrillo = req.body.brillo;       // Número entre 10 y 100
+    const nivelTemp = req.body.temperatura;    // Número entre 2700 y 6500
+
+    // 2. Construimos el mensaje de texto en el formato JSON idéntico que WiZ exige de fábrica
+    const mensajeWiz = JSON.stringify({
+        method: "setPilot",
+        params: {
+            state: true,          // La encendemos automáticamente al mover la barra
+            dimming: nivelBrillo, // Setea la potencia de la luz
+            temp: nivelTemp       // Setea el color frío o cálido
+        }
+    });
+
+    // 3. Creamos un socket UDP y le disparamos el paquete por Wi-Fi al puerto 38899 de la lámpara
+    const clienteUdp = dgram.createSocket('udp4');
+    
+    clienteUdp.send(mensajeWiz, 38899, ipLampara, function(err) {
+        clienteUdp.close(); // Cerramos el canal de red de forma segura para no saturar la RAM
+        
+        if (err) {
+            console.error("❌ Falló el envío Wi-Fi local hacia WiZ:", err);
+            res.status(500).send("Error de comunicación con la lámpara");
+        } else {
+            console.log(`📡 [WiZ] Comando enviado con éxito a ${ipLampara} -> Brillo: ${nivelBrillo}%, Temp: ${nivelTemp}K`);
+            res.status(200).send("Lámpara WiZ actualizada con éxito");  
+        }
+    });
+});
+
+///////////////
 app.listen(PORT, function(req, res) {
     console.log("NodeJS API running correctly");
 });
