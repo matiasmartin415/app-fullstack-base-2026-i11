@@ -94,6 +94,7 @@ function ClearText() {
 // ============================================================================
 
 // 1. EL MOLDE: Definimos la Clase aplicando Encapsulamiento
+/*
 class LamparaWiz {
     private ip: string;
     private brillo: number = 100;
@@ -131,55 +132,69 @@ class LamparaWiz {
         });
     }
 }
+*/
 
 // 2. EL ARRANQUE: Conectamos los listeners cuando se carga la pantalla
 window.addEventListener("load", () => {
     console.log("¡El módulo WiZ se ha cargado correctamente!");
 
-    // 🌟 REEMPLAZA ESTA IP por la IP real que tenga tu lámpara WiZ en tu casa
-    let miLamparaWiz = new LamparaWiz("192.168.1.34"); 
+    // 🛠️ FUNCIÓN REUTILIZABLE: Evita repetir código para cada lámpara
+    const inicializarLampara = (ip: string, idBrillo: string, idTemperatura: string) => {
+        const lampara = new LamparaWiz(ip);
 
-    // Buscamos las dos barras deslizantes físicas del HTML
-    const controlBrillo = document.getElementById("wiz-brillo") as HTMLInputElement;
-    const controlTemp = document.getElementById("wiz-temperatura") as HTMLInputElement;
+        const controlBrillo = document.getElementById(idBrillo) as HTMLInputElement;
+        const controlTemp = document.getElementById(idTemperatura) as HTMLInputElement;
 
-    const actualizarLampara = () => {
-        let valorBrillo = parseInt(controlBrillo.value);
-        let valorTemperatura = parseInt(controlTemp.value);
-        miLamparaWiz.cambiarAjustes(valorBrillo, valorTemperatura);
+        if (controlBrillo && controlTemp) {
+            const enviarCambios = () => {
+                const brillo = parseInt(controlBrillo.value);
+                const temp = parseInt(controlTemp.value);
+                lampara.cambiarAjustes(brillo, temp);
+            };
+
+            controlBrillo.addEventListener("change", enviarCambios);
+            controlTemp.addEventListener("change", enviarCambios);
+        } else {
+            console.error(`No se encontraron los controles '${idBrillo}' o '${idTemperatura}' en el HTML`);
+        }
     };
 
-    // Escuchamos el cambio de las barras
-    if (controlBrillo && controlTemp) {
-        controlBrillo.addEventListener("change", actualizarLampara);
-        controlTemp.addEventListener("change", actualizarLampara);
-    } else {
-        console.error("No se encontraron los IDs 'wiz-brillo' o 'wiz-temperatura' en el HTML");
+    // Instanciamos tus dos lámparas de forma limpia
+    inicializarLampara("192.168.1.34", "wiz-brillo", "wiz-temperatura");
+    inicializarLampara("192.168.1.47", "wiz-brillo-2", "wiz-temperatura-2");
+
+    // ========================================================================
+    // 🧪 CAPTURA Y PRUEBA DEL FORMULARIO DE ALTA
+    // ========================================================================
+    const formulario = document.getElementById("formulario-dispositivo") as HTMLFormElement;
+    const txtNombre = document.getElementById("form-nombre") as HTMLInputElement;
+    const txtDescripcion = document.getElementById("form-descripcion") as HTMLInputElement;
+    const selectTipo = document.getElementById("form-tipo") as HTMLSelectElement;
+    const txtIp = document.getElementById("form-ip") as HTMLInputElement;
+    const txtMac = document.getElementById("form-mac") as HTMLInputElement;
+    const lblMensaje = document.getElementById("form-mensaje") as HTMLElement;
+
+    if (formulario) {
+        formulario.addEventListener("submit", (evento) => {
+            evento.preventDefault(); // Evita que Firefox recargue la página
+
+            const datosCapturados = {
+                nombre: txtNombre.value,
+                descripcion: txtDescripcion.value,
+                tipo: parseInt(selectTipo.value),
+                ip: txtIp.value.trim(),
+                mac: txtMac.value.trim()
+            };
+
+            console.log("📦 ¡Datos capturados por el EventListener!");
+            console.table(datosCapturados);
+
+            if (lblMensaje) {
+                lblMensaje.innerText = `✅ Capturado en memoria: ${datosCapturados.nombre} (IP: ${datosCapturados.ip || 'N/A'})`;
+                lblMensaje.style.color = "green";
+            }
+
+            formulario.reset(); // Limpia los casilleros
+        });
     }
-
-    // ==========================================
-    // 🆕 CONFIGURACIÓN LÁMPARA 2 (Agrega esto abajo)
-    // ==========================================
-    // 🌟 INSTANCIACIÓN: Creamos el segundo objeto independiente usando el mismo molde
-    let miLamparaWiz2 = new LamparaWiz("192.168.1.47"); // 👈 Pon aquí la IP de tu segunda lámpara
-
-    // Buscamos los nuevos deslizadores en el HTML
-    const controlBrillo2 = document.getElementById("wiz-brillo-2") as HTMLInputElement;
-    const controlTemp2 = document.getElementById("wiz-temperatura-2") as HTMLInputElement;
-
-    // Función conectoras exclusiva para la lámpara 2
-    const actualizarLampara2 = () => {
-        let b2 = parseInt(controlBrillo2.value);
-        let t2 = parseInt(controlTemp2.value);
-        
-        console.log(`[Frontend] Ajustando Lámpara 2 -> Brillo: ${b2}%, Temp: ${t2}K`);
-        miLamparaWiz2.cambiarAjustes(b2, t2); // El objeto de la lámpara 2 manda su propio fetch
-    };
-
-    // Conectamos los nuevos listeners
-    if (controlBrillo2 && controlTemp2) {
-        controlBrillo2.addEventListener("change", actualizarLampara2);
-        controlTemp2.addEventListener("change", actualizarLampara2);
-    }
-
 });

@@ -4,6 +4,14 @@
       <link href="https://googleapis.com" rel="stylesheet">
       <link type="text/css" rel="stylesheet" href="./static/css/materialize.min.css"  media="screen,projection"/>
       <link type="text/css" rel="stylesheet" href="./static/css/styles.css"  media="screen,projection"/>
+     
+      <script type="text/javascript" src="./static/js/materialize.min.js"></script>
+
+      <script type="text/javascript" src="js/lamparaWiz.js"></script>
+      <script type="text/javascript" src="js/main.js"></script>
+
+      
+
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body class="grey lighten-4">
@@ -34,7 +42,60 @@
                         <button class="btn waves-effect waves-light button-view" onclick="ClearText();" name="clear_button" style="margin-left: 10px;">LIMPIAR</button>
                     </div>
                 </div>
+///////////////////////
+                <!-- 🆕 FORMULARIO DE CARGA DE DISPOSITIVOS -->
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col s12">
+                        <div class="card white z-depth-1" style="border-radius: 8px;">
+                            <div class="card-content">
+                                <span class="card-title bold" style="font-weight: bold; color: #124580;">➕ Registrar Nuevo Dispositivo</span>
+                                <p class="grey-text">Complete los datos para agregar un equipo al sistema</p>
+                                <br>
+                                
+                                <form id="formulario-dispositivo">
+                                    <div class="row">
+                                        <div class="input-field col s12 m3">
+                                            <input type="text" id="form-nombre" required>
+                                            <label for="form-nombre">Nombre (Ej: WiZ Cocina)</label>
+                                        </div>
+                                        
+                                        <div class="input-field col s12 m3">
+                                            <input type="text" id="form-descripcion" required>
+                                            <label for="form-descripcion">Descripción (Ej: Luz mesada)</label>
+                                        </div>
+                                        
+                                        <div class="input-field col s12 m2">
+                                            <select id="form-tipo" class="browser-default" style="margin-top: 15px; border: 1px solid #9e9e9e; border-radius: 4px; padding: 5px;">
+                                                <option value="1">Lámpara Común</option>
+                                                <option value="3" selected>💡 Lámpara WiZ</option>
+                                                <option value="2">Ventilador</option>
+                                            </select>
+                                        </div>
 
+                                        <div class="input-field col s12 m2">
+                                            <input type="text" id="form-ip" placeholder="Ej: 192.168.1.47">
+                                            <label for="form-ip" class="active">Dirección IP</label>
+                                        </div>
+
+                                        <div class="input-field col s12 m2">
+                                            <input type="text" id="form-mac" placeholder="Ej: a8:bb:50:11:22:33" maxlength="17">
+                                            <label for="form-mac" class="active">Dirección MAC</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn waves-effect waves-light" type="submit" style="background-color: #124580;">
+                                        Guardar Dispositivo
+                                    </button>
+                                </form>
+                                
+                                <div id="form-mensaje" style="margin-top: 15px; font-weight: bold;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+
+//////////////////////
                 <!-- 💡 SECCIÓN DE LAS LÁMPARAS WIZ ALINEADAS -->
                 <div class="row" style="margin-top: 30px;">
                     
@@ -93,7 +154,6 @@
         </footer>
 		
         <!-- JavaScript al final para carga optimizada -->
-        <script type="text/javascript" src="./static/js/materialize.min.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
+
     </body>
   </html>
