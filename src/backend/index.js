@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static('/home/node/app/static/'));
 
 //=======[ Main module code ]==================================================
-
+/*
 app.get('/devices/', function(req, res, next) {
     devices = [
         { 
@@ -31,6 +31,49 @@ app.get('/devices/', function(req, res, next) {
         },
     ]
     res.send(JSON.stringify(devices)).status(200);
+});
+*/
+///////////////A diferencia anterior comentado, saca afuera get dispositivos y cambia res
+//=======[ Settings, Imports & Data ]==========================================
+
+
+//=======[ Main module code ]==================================================
+
+// 👇 1. SACAMOS LA LISTA AFUERA PARA QUE CONSERVE LOS DISPOSITIVOS NUEVOS
+let devices = [
+    { 
+        'id': 1, 
+        'name': 'Lampara 1', 
+        'description': 'Luz living', 
+        'state': 0, 
+        'type': 1, 
+    },
+    { 
+        'id': 2, 
+        'name': 'Ventilador 1', 
+        'description': 'Ventilador Habitacion', 
+        'state': 1, 
+        'type': 2, 
+    },
+];
+
+// 👇 2. RUTA DE LECTURA: Devuelve los precargados + los nuevos que cargues
+app.get('/devices/', function(req, res, next) {
+    res.status(200).send(JSON.stringify(devices));
+});
+
+// 👇 3. NUEVA RUTA DE ALTA: Recibe el JSON de tu formulario y lo suma a la lista
+app.post('/devices/add', function(req, res) {
+    const nuevo = req.body;
+    
+    // Calcula el siguiente ID disponible (3, 4, 5...)
+    nuevo.id = devices.length > 0 ? devices[devices.length - 1].id + 1 : 1;
+
+    // Lo guarda al final del arreglo
+    devices.push(nuevo);
+
+    console.log(`➕ [Express] Dispositivo sumado: ${nuevo.name} | IP: ${nuevo.ip || 'N/A'} | MAC: ${nuevo.mac || 'N/A'}`);
+    res.status(201).json({ mensaje: "Registrado con éxito", dispositivo: nuevo });
 });
 
 ///////////////
@@ -77,3 +120,5 @@ app.listen(PORT, function(req, res) {
 });
 
 //=======[ End of file ]=======================================================
+
+//////////////

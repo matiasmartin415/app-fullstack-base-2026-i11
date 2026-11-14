@@ -164,7 +164,7 @@ window.addEventListener("load", () => {
     inicializarLampara("192.168.1.47", "wiz-brillo-2", "wiz-temperatura-2");
 
     // ========================================================================
-    // 🧪 CAPTURA Y PRUEBA DEL FORMULARIO DE ALTA
+    // 🚀 CAPTURA Y ENVÍO REAL AL SERVIDOR (Fetch + Async/Await)
     // ========================================================================
     const formulario = document.getElementById("formulario-dispositivo") as HTMLFormElement;
     const txtNombre = document.getElementById("form-nombre") as HTMLInputElement;
@@ -175,26 +175,48 @@ window.addEventListener("load", () => {
     const lblMensaje = document.getElementById("form-mensaje") as HTMLElement;
 
     if (formulario) {
-        formulario.addEventListener("submit", (evento) => {
+        formulario.addEventListener("submit", async (evento) => {
             evento.preventDefault(); // Evita que Firefox recargue la página
 
-            const datosCapturados = {
-                nombre: txtNombre.value,
-                descripcion: txtDescripcion.value,
-                tipo: parseInt(selectTipo.value),
+            // Validación: exige al menos IP o MAC si es una lámpara WiZ
+            if (selectTipo.value === "3" && txtIp.value.trim() === "" && txtMac.value.trim() === "") {
+                lblMensaje.innerText = "⚠️ Debes ingresar al menos la IP o la MAC para una lámpara WiZ.";
+                lblMensaje.style.color = "orange";
+                return;
+            }
+
+            // Armamos el paquete de datos con los nombres exactos que espera Express
+            const nuevoDispositivo = {
+                name: txtNombre.value,
+                description: txtDescripcion.value,
+                type: parseInt(selectTipo.value),
+                state: 0,
                 ip: txtIp.value.trim(),
                 mac: txtMac.value.trim()
             };
 
-            console.log("📦 ¡Datos capturados por el EventListener!");
-            console.table(datosCapturados);
+            try {
+                // Disparamos la petición POST asíncrona hacia el servidor
+                const respuesta = await fetch('http://localhost:8000/devices/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(nuevoDispositivo)
+                });
 
-            if (lblMensaje) {
-                lblMensaje.innerText = `✅ Capturado en memoria: ${datosCapturados.nombre} (IP: ${datosCapturados.ip || 'N/A'})`;
-                lblMensaje.style.color = "green";
+                if (respuesta.ok) {
+                    console.log("📦 ¡Enviado y guardado en Express!", nuevoDispositivo);
+                    lblMensaje.innerText = `✅ ¡${nuevoDispositivo.name} guardado en el servidor!`;
+                    lblMensaje.style.color = "green";
+                    formulario.reset(); // Limpia los casilleros
+                } else {
+                    lblMensaje.innerText = "❌ Error en el servidor al guardar.";
+                    lblMensaje.style.color = "red";
+                }
+            } catch (error) {
+                console.error("Error de red en el fetch:", error);
+                lblMensaje.innerText = "❌ Error de conexión con el backend.";
+                lblMensaje.style.color = "red";
             }
-
-            formulario.reset(); // Limpia los casilleros
         });
     }
 });

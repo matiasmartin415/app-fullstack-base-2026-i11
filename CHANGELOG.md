@@ -18,6 +18,19 @@ Funciona pero no apaga del todo la lámpara.
 Funciona pero se cambian los IPasignados por router.(DHCP creo)(Para solucionar me sugiere asociar MAC de lampara y para hacerlo mas correcto, qu esos datos se guarden en SQL)
 Además, encontré que las lámparas usan protocolo UDP (el backend envía datos udp y listo. no espera respuesta)(Si la lampara esta apagada el sistema no se entera)
 
+#11/11/2026
+Modifiqué lo hecho de lamparas Wiz de acuerdo a lo qu dice profesor:
+-Clase lampara wiz creada en carpeta afuera
+-declaré script en html
+-En main.ts saqué repeticion de codigo para crear nueva lampara wiz (inicializar lampara)
+-Creé formulario para cargar nuevo dispositivo lampara Wiz pidiendo ip ó MAC (probé funcionamiento desde navegador con inspector F12)
+
+#12/11/2026
+-Desde main.ts habilito fetch para petición asíncrona post con destino a servidor backend a express
+-En index.js saco afuera get los dispositivos que ya estaban precargadso (lampara y ventilador) y se coloca app.post para devices/add (agregar lamparas WIz)
+-Los dispositivos nuevos cargados desde navegador y disposit. precargados quedan en RAM. No toco nada Mysql.
+-Pruebo, desde navegador con localhost:8000/devices/ .Funciona (devuelve los precargados y los que agregué por formulario)
+
 # DAW Base App - Changes Log
 
 All notable changes to this project will be documented in this file.
